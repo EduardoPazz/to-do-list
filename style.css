@@ -9,8 +9,12 @@ html {box-sizing: border-box;}
 /* 
     Hierarquy:
         -header
-        -section#inputs
-        -section#list
+        -main
+            --section#inputs
+                ---div#buttons
+                ---form
+            --div#list
+                ---ul
 */
 
 /* body */
@@ -53,19 +57,19 @@ section#inputs {
     border-right: black 2px solid;
 }
 
+/* div#buttons */
+
+div#buttons {
+    display: flex;
+    flex-direction: column;
+}
+
 div#buttons button {
     font-size: inherit;
 
     padding: 10px 0;
 
     margin-bottom: 20px;
-}
-
-/* div#buttons */
-
-div#buttons {
-    display: flex;
-    flex-direction: column;
 }
 
 /* form */
@@ -96,8 +100,6 @@ form input {
     margin-bottom: 10px;
 }
 
-/* section#list-area */
-
 /* div#list */
 
 div#list {
@@ -111,6 +113,8 @@ div#list.hide {
     margin-left: -16px;
 }
 
+/* ul */
+
 div#list ul {
     display: grid;
     grid-template-columns: 30px 9fr 1fr;
@@ -120,8 +124,6 @@ div#list ul {
 }
 
 div#list ul div#checkbox {
-    content: '';
-
     width: 25px;
     height: 25px;
 
@@ -139,8 +141,6 @@ div#list ul div#checkbox.checked {
 
 div#list ul li {
     border-bottom: black 1px solid;
-
-    display: flex;
 }
 
 div#list ul li.checked {
@@ -152,5 +152,3 @@ div#list ul button {
 
     font-size: inherit;
 }
-
-/* in-line */
