@@ -1,43 +1,47 @@
-/* class */
-    /* I decided to store each todo in a object, containing, beside the string, some methods to exclude and edit it */
+/* ISSUES: - By pressing enter on the writeInput, the page reloads, what it is not what I expected */
 
-class Todo {
-    constructor(todo) {
-        todo
-    }
-    
-    
-}
+/* Handling Data Scripts */
 
-
-/* getting previous to-dos and updating it in the meantime */
+    /* getting previous to-dos and updating it in the meantime */
 
 const UList = document.querySelector('div#list ul');
 
-let todos = JSON.parse(localStorage.getItem('to-dos')) || [] ;
+let todos = JSON.parse(localStorage.getItem('to-dos')) || [] ; // fetch from the localStorage the previous to-dos. If nothing stands there, a empty array is created
 
 updateTodos(todos); // it does a first call from the previous to-dos stored
 
-function updateTodos(todos) { /* beyond creating a list item, this function also include some functions do edit and exclude the respective item */
-    UList.textContent = '';
-    for (let todo of todos) {
+function updateTodos(todos) { /* beyond creating a list item, this function also include a way of excluding the respective item */
+    UList.textContent = ''; // empty the list
+
+    for (let todo of todos) { // fetch all the todos 
         let listItem = document.createElement('li');
-        let deleteItem = document.createElement('li');
-        let editItem = document.createElement('li');
+        let excludeButton = document.createElement('button');
 
         listItem.textContent = todo;
+        excludeButton.textContent = '🗑️';
 
-        UList.appendChild(listItem)
+
+        excludeButton.addEventListener('click', (evt) => {
+            /* evt.target.parentElement.removeChild(listItem); // it excludes the item from the screen */
+
+            excludingTodo(listItem); // it excludes the item from the localStorage
+
+            /* evt.target.parentElement.removeChild(evt.target) // it excludes itself */
+        });
+
+        UList.appendChild(listItem);
+        listItem.insertAdjacentElement('afterend', excludeButton) // positionate the excludeButton right after de listItem
     }
 }
 
-/* writing to-dos and calling the storing*/
+
+    /* testing writeInput and calling the storing*/
 
 const mark = document.querySelector('form button');
 
-mark.addEventListener('click', () => write(writeInput.value))
+mark.addEventListener('click', () => testing(writeInput.value))
 
-function write(todo) {
+function testing(todo) {
     if (todo.length === 0) {
         alert('Write something')
     } else {
@@ -46,7 +50,8 @@ function write(todo) {
     }
 }
 
-/* storing to-dos */
+
+    /* storing to-dos */
 
 function storingTodo(todo) {
     todos.push(todo);
@@ -54,7 +59,23 @@ function storingTodo(todo) {
     localStorage.setItem('to-dos', JSON.stringify(todos))
 }
 
-/* Toggling form */
+
+    /* Excluding to-dos */
+
+function excludingTodo(todo) { // here we get only the textContent of the to-do, not exactly the array element. Thus, we have to find the correspondent element of the array and update the list and the localStorage interely
+    const position = todos.indexOf(todo.textContent); // it finds the correspondent index of the value parsed
+
+    todos.splice(position, 1); // exclude the item from the original array
+
+    updateTodos(todos);
+
+    localStorage.setItem('to-dos', JSON.stringify(todos)) // this brand new setItem overwrite the previous one
+}
+
+
+/* User-Interface Scripts */
+
+    /* Toggling form */
 
 const form = document.querySelector('form');
 const writeButton = document.querySelector('button#write');
@@ -72,7 +93,8 @@ writeButton.addEventListener('click', () => {
     }
 })
 
-/* Toggling list */
+
+    /* Toggling list */
 
 const list = document.querySelector('div#list');
 const showHide = document.querySelector('button#show-hide');
