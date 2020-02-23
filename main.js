@@ -10,26 +10,28 @@ let todos = JSON.parse(localStorage.getItem('to-dos')) || [] ; // fetch from the
 
 updateTodos(todos); // it does a first call from the previous to-dos stored
 
-function updateTodos(todos) { /* beyond creating a list item, this function also include a way of excluding the respective item */
+function updateTodos(todos) { /* beyond creating a list item, this function also include a way of excluding the respective item and a checkbox to it*/
     UList.textContent = ''; // empty the list
 
     for (let todo of todos) { // fetch all the todos 
         let listItem = document.createElement('li');
         let excludeButton = document.createElement('button');
+        let checkBox = document.createElement('div');
+
+        checkBox.setAttribute('id', 'checkbox');
 
         listItem.textContent = todo;
         excludeButton.textContent = '🗑️';
 
+        checkBox.addEventListener('click', evt => {
+            evt.target.classList.toggle('checked')
+            listItem.classList.toggle('checked')
+        })
 
-        excludeButton.addEventListener('click', (evt) => {
-            /* evt.target.parentElement.removeChild(listItem); // it excludes the item from the screen */
-
-            excludingTodo(listItem); // it excludes the item from the localStorage
-
-            /* evt.target.parentElement.removeChild(evt.target) // it excludes itself */
-        });
+        excludeButton.addEventListener('click', () => excludingTodo(listItem));
 
         UList.appendChild(listItem);
+        listItem.insertAdjacentElement('beforebegin', checkBox) // positionate the excludeButton right after de listItem
         listItem.insertAdjacentElement('afterend', excludeButton) // positionate the excludeButton right after de listItem
     }
 }
