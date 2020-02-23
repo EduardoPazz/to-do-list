@@ -1,4 +1,12 @@
 /* Handling Data Scripts */
+    /* Creating the Class Todo */
+class Todo {
+    constructor(todo, checked=false) {
+        this.todo = todo,
+        this.checked = checked // this will be necessary to store if the to-do is checked or not
+    }
+}
+
 
     /* getting previous to-dos and updating it in the meantime */
 
@@ -12,25 +20,45 @@ function updateTodos(todos) { /* beyond creating a list item, this function also
     UList.textContent = ''; // empty the list
 
     for (let todo of todos) { // fetch all the todos 
+        let checkBox = document.createElement('div');
         let listItem = document.createElement('li');
         let excludeButton = document.createElement('button');
-        let checkBox = document.createElement('div');
+        
 
-        checkBox.setAttribute('id', 'checkbox');
+        checkBox.setAttribute('id', 'checkbox'); // this is necessary for the CSS to identify it
 
-        listItem.textContent = todo;
+        listItem.textContent = todo.todo; // it applies the to-do text to a <li> node
         excludeButton.textContent = '🗑️';
 
-        checkBox.addEventListener('click', evt => {
-            evt.target.classList.toggle('checked')
-            listItem.classList.toggle('checked')
+        if (todo.checked === true) { // the default behavior is todo.checked === false, but if it was checked before, this conditional keeps that information and the style correspondent
+            checkBox.setAttribute('class', 'checked');
+            listItem.setAttribute('class', 'checked')
+        }
+
+        checkBox.addEventListener('click', evt => { // this callback will toggle the todo.checked and class="checked" by the click of the user
+            if (todo.checked === false) {
+                todo.checked = true;
+
+                evt.target.setAttribute('class', 'checked');
+                listItem.setAttribute('class', 'checked');
+
+
+                localStorage.setItem('to-dos', JSON.stringify(todos)) // it's necessary to store that change right here, because whether the page is reloaded, the checked information would be lost
+            } else if (todo.checked === true) {
+                todo.checked = false;
+                
+                evt.target.removeAttribute('class');
+                listItem.removeAttribute('class');
+
+                localStorage.setItem('to-dos', JSON.stringify(todos)) // it's necessary to store that change right here, because whether the page is reloaded, the checked information would be lost
+            }
         })
 
-        excludeButton.addEventListener('click', () => excludingTodo(listItem));
+        excludeButton.addEventListener('click', () => excludingTodo(todo));
 
         UList.appendChild(listItem);
-        listItem.insertAdjacentElement('beforebegin', checkBox) // positionate the excludeButton right after de listItem
-        listItem.insertAdjacentElement('afterend', excludeButton) // positionate the excludeButton right after de listItem
+        listItem.insertAdjacentElement('beforebegin', checkBox); // positionate the excludeButton right after de listItem
+        listItem.insertAdjacentElement('afterend', excludeButton); // positionate the excludeButton right after de listItem
     }
 }
 
@@ -54,18 +82,22 @@ function testing(todo) {
     /* storing to-dos */
 
 function storingTodo(todo) {
-    todos.push(todo);
+    const todoObj = new Todo(todo);
+
+    todos.push(todoObj);
+
     updateTodos(todos);
+
     localStorage.setItem('to-dos', JSON.stringify(todos))
 }
 
 
     /* Excluding to-dos */
 
-function excludingTodo(todo) { // here we get only the textContent of the to-do, not exactly the array element. Thus, we have to find the correspondent element of the array and update the list and the localStorage interely
-    const position = todos.indexOf(todo.textContent); // it finds the correspondent index of the value parsed
+function excludingTodo(todoObj) {
+    const position = todos.indexOf(todoObj)
 
-    todos.splice(position, 1); // exclude the item from the original array
+    todos.splice(position, 1); // exclude the object from the original array
 
     updateTodos(todos);
 
