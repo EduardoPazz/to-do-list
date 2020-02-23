@@ -1,5 +1,3 @@
-/* ISSUES: - By pressing enter on the writeInput, the page reloads, what it is not what I expected */
-
 /* Handling Data Scripts */
 
     /* getting previous to-dos and updating it in the meantime */
