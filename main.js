@@ -1,9 +1,9 @@
 /* Handling Data Scripts */
-/* Creating the Class Todo */
+    /* Creating the Class Todo */
 class Todo {
-    constructor(todo, checked = false) {
+    constructor(todo, checked=false) {
         this.todo = todo,
-            this.checked = checked // this will be necessary to store if the to-do is checked or not
+        this.checked = checked // this will be necessary to store if the to-do is checked or not
     }
 }
 
@@ -23,7 +23,7 @@ function updateTodos(todos) { /* beyond creating a list item, this function also
         let checkBox = document.createElement('div');
         let listItem = document.createElement('li');
         let excludeButton = document.createElement('button');
-
+        
 
         checkBox.setAttribute('id', 'checkbox'); // this is necessary for the CSS to identify it
 
@@ -46,7 +46,7 @@ function updateTodos(todos) { /* beyond creating a list item, this function also
                 localStorage.setItem('to-dos', JSON.stringify(todos)) // it's necessary to store that change right here, because whether the page is reloaded, the checked information would be lost
             } else if (todo.checked === true) {
                 todo.checked = false;
-
+                
                 evt.target.removeAttribute('class');
                 listItem.removeAttribute('class');
 
